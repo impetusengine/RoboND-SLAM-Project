@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- send urdf to param server -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find slam_project)/urdf/slam_project.xacro'"/>
+
+<!-- Send fake joint values-->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="false"/>
+  </node>
+
+<!-- Send robot states to tf -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen"/>
+  
+<!--tf static transforms for fixed joints-->
+<node pkg="tf" type="static_transform_publisher" name="hokuyo_broadcaster" args="0 0 .1 0 0 0 chassis hokuyo 100"/>
+<node pkg="tf" type="static_transform_publisher" name="back_left_caster_broadcaster" args="-.075 .087 -.075 0 0 0 chassis back_left_caster 100"/>
+<node pkg="tf" type="static_transform_publisher" name="back_right_caster_broadcaster" args="-.075 -.087 -.075 0 0 0 chassis back_right_caster 100"/>
+<node pkg="tf" type="static_transform_publisher" name="robot_footprint_broadcaster" args="0 0 0 0 0 0 robot_footprint chassis 100"/>
+<node pkg="tf" type="static_transform_publisher" name="camera_rgb_joint_broadcaster" args="0.12 0 0.0415 0 0 0 chassis camera_rgb_frame 100"/>
+<node pkg="tf" type="static_transform_publisher" name="camera_rgb_optical_joint_broadcaster" args="0 0 0 -1.571 0 -1.571 camera_rgb_frame camera_rgb_optical_frame 100"/>
+<node pkg="tf" type="static_transform_publisher" name="camera_joint_broadcaster" args="-.031 0 -.016 0 0 0 camera_rgb_frame camera_link 100"/>
+<node pkg="tf" type="static_transform_publisher" name="camera_depth_joint_broadcaster" args="0 0 0 0 0 0 camera_rgb_frame camera_depth_frame 100"/>
+<node pkg="tf" type="static_transform_publisher" name="camera_depth_optical_joint_broadcaster" args="0 0 0 -1.571 0 -1.571 camera_depth_frame camera_depth_optical_frame 100"/>
+</launch>
